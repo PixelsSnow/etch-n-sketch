@@ -1,0 +1,26 @@
+#grid, html, body {
+    height: 100%;
+    width: 80%;
+    margin: 0;
+    min-height: 0;
+    margin-left: 10%;
+}
+
+
+.row {
+    display: flex;
+    flex-flow: row wrap;
+}
+.column {
+    width: auto;
+    height: 60px;
+    background-color: white;
+    outline: 5px solid black;
+    flex-basis: 100%;
+}
+
+@media screen and (min-width:800px){
+    .column {
+        flex: 1;
+    }
+}

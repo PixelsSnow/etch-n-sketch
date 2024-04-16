@@ -8,5 +8,49 @@
 </head>
 <body>
     <div id="grid"></div>
+    <script>
+
+    //Two for loops, each to add an 'x' amount of rows & columns    
+        for(let i = 0; i < 16; i++){
+        addrow();
+        }for(let i = 0; i < 16; i++){
+        addcolumn();
+        }
+    
+    // Creates a function to create rows, by searching for the container div, and then appending it inside
+        function addrow () {
+            const row = document.createElement('div')
+            row.setAttribute("class", "row")
+            document.getElementById('grid').appendChild(row);
+            }
+
+    // Creates a function to create columns, by searching for every class 'row', and then for each one
+    // it creates a column with the appropriate attributes and then appends it 
+        function addcolumn () {
+            let dynamics = document.querySelectorAll(".row")
+            dynamics.forEach(el => {
+                let column = document.createElement('div');
+                column.setAttribute("class", "column");
+                el.appendChild(column);
+            })
+        }
+       
+    // Assigns an array of the column class names to the variable 'elements'
+        var elements = document.getElementsByClassName("column"); 
+     
+    // Creates a function to change the attribute of whatever is thrown inside to the color specified
+        function mouseOver() {
+        var attribute = this.style.backgroundColor = "red";
+       }
+
+    // Itterates through the array of 'column' and checks to see if the mouse is positioned over it
+       for (var i = 0; i < elements.length; i++) {
+    elements[i].addEventListener('mouseover', mouseOver, false);
+}
+        
+        
+    
+    
+    </script>
 </body>
 </html>
