@@ -5,48 +5,163 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>etch-n-sketch</title>
     <link href="styles.css" rel="stylesheet" type="text/css" media="screen">
+
+
 </head>
 <body>
-    <div id="grid"></div>
+    <h1><span style="font-size:0.60em; vertical-align: text-top">MAGIC</span> Etch A' Sketch® <span style="font-size:0.60em; vertical-align: text-top">SCREEN</span></h1>
+    <div class="grid"></div>
+
+    <div id="color-buttons">
+        <button class="color-options" id="colors"><b>Colors</b></button>
+        <button class="color-options" id="black"><b>Black</b></button>
+    </div>
+    
+    <button id="reset"><b>Reset</b></button>
+
+
     <script>
+    let buttonReset = document.getElementById("reset");
+    let buttonColors = document.getElementById("colors");
+    let buttonBlack = document.getElementById("black");
+    let gridContainer = document.querySelector(".grid");
+    let gridPixel;
+    let userPixels;
+    let totalNumSquares = 2500;
+    let allGridPixels;
+    let newFlexBasis;
+
+        function generateGrid() {
+            for (let i=1; i <= totalNumSquares; i++) {
+                gridPixel = document.createElement("div");
+                gridContainer.appendChild(gridPixel);
+
+            }
+        }
+
+        function removeOldPixels() {
+            while (gridContainer.hasChildNodes()) {
+                gridContainer.removeChild(gridContainer.firstChild);
+            }
+        }
+
+        function addMouseoverEvent() {
+            allGridPixels = document.querySelectorAll (".grid div");
+            for (let i=0; i < allGridPixels.length; i++) {
+                allGridPixels[i].addEventListener("mouseover", setBlackColor)
+            }
+        }
+
+        function setBlackColor() {
+            this.style.backgroundColor = "black";
+            if (this.style.opacity <= 1.0) {
+                this.style.opacity = +this.style.opacity + 0.1;
+            }
+        }
+
+        function resetFlexBasis() {
+            newFlexBasis = 500 / userPixels + "px";
+            for (let i = 0; i < allGridPixels.length; i++) {
+             allGridPixels[i].style.flexBasis = newFlexBasis;
+            }
+        }
+
+        function resetGrid () {
+            for (let i=0; i < allGridPixels.length; i++) {
+                allGridPixels[i].style.backgroundColor = "white";
+            }
+            userPixels = +prompt("How many grid squares per side would you like?\n\n(minimum 8, maximum 100)", "100");
+            if (userPixels == 0) {
+                userPixels = 50;
+            } else if (userPixels > 100) {
+                userPixels = 100;
+            } else if (userPixels < 8) {
+                userPixels = 8;
+            }
+            totalNumSquares = userPixels * userPixels;
+            removeOldPixels();
+            generateGrid();
+            addMouseoverEvent();
+            resetFlexBasis();
+        }
+
+        function switchToColors() {
+            allGridPixels = document.querySelectorAll(".grid div");
+
+            for (let i=0; i < allGridPixels.length; i++) {
+                allGridPixels[i].removeEventListener("mouseover", setBlackColor);
+                allGridPixels[i].addEventListener("mouseover", setRandomColor);
+            }
+        }
+
+        function setRandomColor() {
+            this.style.backgroundColor = random_rgb();
+            if (this.style.opacity <= 1.0) {
+                this.style.opacity = +this.style.opacity + 0.1;
+            }
+        }
+
+        function random_rgb() {
+            var num = Math.round(0xffffff * Math.random());
+            var r = num >> 16;
+            var g = num >> 8 & 255;
+            var b = num & 255;
+            return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+        }
+
+        function switchBackToBlack () {
+            allGridPixels = document.querySelectorAll(".grid div");
+
+            for (let i=0; i < allGridPixels.length; i++) {
+                allGridPixels[i].removeEventListener("mouseover", setRandomColor);
+                allGridPixels[i].addEventListener("mouseover", setBlackColor);
+                 }
+         }
+        
+    generateGrid();
+    addMouseoverEvent();
+    buttonReset.addEventListener("click", resetGrid);
+    buttonColors.addEventListener("click", switchToColors);
+    buttonBlack.addEventListener("click", switchBackToBlack);
+
 
     //Two for loops, each to add an 'x' amount of rows & columns    
-        for(let i = 0; i < 50; i++){
-        addrow();
-        }for(let i = 0; i < 50; i++){
-        addcolumn();
-        }
+    //    for(let i = 0; i < 50; i++){
+     //   addrow();
+     //   }for(let i = 0; i < 50; i++){
+     //   addcolumn();
+     //   }
     
     // Creates a function to create rows, by searching for the container div, and then appending it inside
-        function addrow () {
-            const row = document.createElement('div')
-            row.setAttribute("class", "row")
-            document.getElementById('grid').appendChild(row);
-            }
+    //    function addrow () {
+    //        const row = document.createElement('div')
+     //       row.setAttribute("class", "row")
+    //        document.getElementById('grid').appendChild(row);
+     //       }
 
     // Creates a function to create columns, by searching for every class 'row', and then for each one
     // it creates a column with the appropriate attributes and then appends it 
-        function addcolumn () {
-            let dynamics = document.querySelectorAll(".row")
-            dynamics.forEach(el => {
-                let column = document.createElement('div');
-                column.setAttribute("class", "column");
-                el.appendChild(column);
-            })
-        }
+     //   function addcolumn () {
+     //       let dynamics = document.querySelectorAll(".row")
+     //       dynamics.forEach(el => {
+     //           let column = document.createElement('div');
+     //           column.setAttribute("class", "column");
+      //          el.appendChild(column);
+      //      })
+      //  }
        
     // Assigns an array of the column class names to the variable 'elements'
-        var elements = document.getElementsByClassName("column"); 
+      //  var elements = document.getElementsByClassName("column"); 
      
     // Creates a function to change the attribute of whatever is thrown inside to the color specified
-        function mouseOver() {
-        var attribute = this.style.backgroundColor = "blue";
-       }
+     //   function mouseOver() {
+     //   var attribute = this.style.backgroundColor = "blue";
+     //  }
 
     // Itterates through the array of 'column' and checks to see if the mouse is positioned over it
-       for (var i = 0; i < elements.length; i++) {
-    elements[i].addEventListener('mouseover', mouseOver, false);
-}
+    //   for (var i = 0; i < elements.length; i++) {
+    //elements[i].addEventListener('mouseover', mouseOver, false);
+//}
         
         
     
